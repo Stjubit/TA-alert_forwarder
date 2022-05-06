@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2.0.0",
   "info": {
-    "title": "TA-alert_forwarder",
+    "title": "Alert Forwarder for Splunk",
     "id": {
       "group": null,
       "name": "TA-alert_forwarder",

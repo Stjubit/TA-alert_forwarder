@@ -1,7 +1,7 @@
 {
     "meta": {
         "name": "TA-alert_forwarder",
-        "displayName": "TA-alert_forwarder",
+        "displayName": "Alert Forwarder for Splunk",
         "version": "1.0.0",
         "restRoot": "TA_alert_forwarder",
         "schemaVersion": "0.0.3"
