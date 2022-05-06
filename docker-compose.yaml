@@ -42,3 +42,19 @@ services:
       - ./splslave001-default.yaml:/tmp/defaults/default.yml
       - ./splslave001-post-tasks.yaml:/tmp/ansible-post-tasks.yaml
       - ./TA-alert_forwarder:/opt/splunk/etc/apps/TA-alert_forwarder
+  
+  splunk_test:
+    container_name: spltest001
+    image: splunk/splunk:8.2.6
+    command: start
+    environment:
+      SPLUNK_HOSTNAME: spltest001
+      SPLUNK_START_ARGS: --accept-license
+      SPLUNK_PASSWORD: secret123
+      SPLUNK_ROLE: splunk_standalone
+      SPLUNK_LICENSE_URI: /tmp/splunk.lic
+    ports:
+      - 8200:8000
+      - 8289:8089
+    volumes:
+      - ./splunk.lic:/tmp/splunk.lic

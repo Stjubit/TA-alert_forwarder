@@ -7,6 +7,7 @@ This Splunk Technical Add-on adds an Alert Action, which you can use to forward 
 The Setup of this TA is pretty simple. Here are the required steps:
 
 - Install the TA on your Splunk instance(s), which should forward Splunk Alerts
+- Restart Splunkd
 - Open the `Alert Forwarder for Splunk` App
   ![Navigation Bar Entry](/screenshots/nav_bar.jpg "Navigation Bar Entry")
 - Add a new HTTP Event Collector
@@ -17,6 +18,18 @@ The Setup of this TA is pretty simple. Here are the required steps:
   ![Proxy/Logging Config](/screenshots/proxy_logging.jpg "Proxy/Logging Config")
 - Open the Splunk Alert you want to forward and add the `Forward to Splunk HEC` Alert Action
   ![Alert Action Config](/screenshots/alert_action.jpg "Alert Action Config")
+- Verify that the Splunk Alert has been forwarded successfully (after the next run)
+  ![Forwarded Alert](/screenshots/forwarded_alert.jpg "Forwarded Alert")
+
+## Troubleshooting
+
+The TA writes logs into `_internal`. You can use the following search for troubleshooting:
+
+```
+index=_internal sourcetype="taalertforwarder:log"
+```
+
+Optionally, raise the Log Level on the App Configuration page.
 
 ## How to dev
 
