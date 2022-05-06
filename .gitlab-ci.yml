@@ -1,0 +1,5 @@
+---
+include:
+  - project: blueprints/gitlab-ci
+    file: /splunk-apps/package-release.yaml
+    ref: master
