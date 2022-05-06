@@ -56,3 +56,7 @@ The HTTP Event Collector (HEC) is automatically enabled by Splunk Ansible.
 
 This Splunk instance generates test alerts and sends them to `splmaster001`.
 The app configuration and Saved Searches is already set, so you just have to spin up the instance via Docker Compose.
+
+## Additional Infos
+
+This project is actually hosted in GitLab and synced bidirectionally with Github.
