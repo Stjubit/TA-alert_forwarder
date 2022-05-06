@@ -1,0 +1,82 @@
+---
+ansible_post_tasks: file:///tmp/ansible-post-tasks.yaml
+splunk:
+  conf:
+    - key: savedsearches
+      value:
+        directory: /opt/splunk/etc/apps/search/local
+        content:
+          default:
+            action.forward_alert_to_splunk_hec.param.regex_field_exclusions: ""
+          'Monitoring Something: Test Alert 1 (Trigger Once)':
+            action.forward_alert_to_splunk_hec: 1
+            action.forward_alert_to_splunk_hec.param.host: splslave001
+            action.forward_alert_to_splunk_hec.param.index: alerts
+            action.forward_alert_to_splunk_hec.param.source: splslave001
+            action.forward_alert_to_splunk_hec.param.sourcetype: httpevent
+            action.forward_alert_to_splunk_hec.param.splunk_hec_target: splmaster001
+            alert.track: 0
+            alert.digest_mode: 1
+            alert_condition: search foo="bar"
+            counttype: custom
+            cron_schedule: "* * * * *"
+            description: TA-alert_forwarder Test Alert 1
+            dispatch.earliest_time: 0
+            enableSched: 1
+            search: '| makeresults count=3 | eval foo="bar"'
+          'Monitoring Something: Test Alert 2 (Trigger for each result)':
+            action.forward_alert_to_splunk_hec: 1
+            action.forward_alert_to_splunk_hec.param.host: splslave001
+            action.forward_alert_to_splunk_hec.param.index: alerts
+            action.forward_alert_to_splunk_hec.param.source: splslave001
+            action.forward_alert_to_splunk_hec.param.sourcetype: httpevent
+            action.forward_alert_to_splunk_hec.param.splunk_hec_target: splmaster001
+            alert.track: 0
+            alert.digest_mode: 0
+            alert_condition: search foo="bar"
+            counttype: custom
+            cron_schedule: "* * * * *"
+            description: TA-alert_forwarder Test Alert 2
+            dispatch.earliest_time: 0
+            enableSched: 1
+            search: '| makeresults count=3 | eval foo="bar"'
+          'Monitoring Something: Test Alert 3 (Internal Search)':
+            action.forward_alert_to_splunk_hec: 1
+            action.forward_alert_to_splunk_hec.param.host: splslave001
+            action.forward_alert_to_splunk_hec.param.index: alerts
+            action.forward_alert_to_splunk_hec.param.source: splslave001
+            action.forward_alert_to_splunk_hec.param.sourcetype: httpevent
+            action.forward_alert_to_splunk_hec.param.splunk_hec_target: splmaster001
+            alert.track: 0
+            alert.digest_mode: 1
+            counttype: number of events
+            relation: greater than
+            alert_threshold: 0
+            cron_schedule: "* * * * *"
+            description: TA-alert_forwarder Test Alert 3
+            dispatch.earliest_time: -30s
+            enableSched: 1
+            search: 'index=_internal sourcetype="splunkd" source="/opt/splunk/var/log/splunk/health.log" feature="System Check"'
+    - key: ta_alert_forwarder_settings
+      value:
+        directory: /opt/splunk/etc/system/local
+        content:
+          logging:
+            loglevel: DEBUG
+    - key: ta_alert_forwarder_hec
+      value:
+        directory: /opt/splunk/etc/system/local
+        content:
+          splmaster001:
+            hostname: host.docker.internal
+            port: 8088
+            token: '******'
+            verify: 0
+    - key: passwords
+      value:
+        directory: /opt/splunk/etc/system/local
+        content:
+          'credential:__REST_CREDENTIAL__#TA-alert_forwarder#configs/conf-ta_alert_forwarder_hec:splmaster001``splunk_cred_sep``1:':
+            password: <to_be_replaced>
+          'credential:__REST_CREDENTIAL__#TA-alert_forwarder#configs/conf-ta_alert_forwarder_hec:splmaster001``splunk_cred_sep``2:':
+            password: '``splunk_cred_sep``S``splunk_cred_sep``P``splunk_cred_sep``L``splunk_cred_sep``U``splunk_cred_sep``N``splunk_cred_sep``K``splunk_cred_sep``'

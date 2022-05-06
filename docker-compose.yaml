@@ -1,0 +1,44 @@
+---
+version: "3.9"
+
+services:
+  splunk_master:
+    container_name: splmaster001
+    image: splunk/splunk:8.2.6
+    command: start
+    environment:
+      SPLUNK_HOSTNAME: splmaster001
+      SPLUNK_START_ARGS: --accept-license
+      SPLUNK_PASSWORD: secret123
+      SPLUNK_ROLE: splunk_standalone
+      SPLUNK_LICENSE_URI: /tmp/splunk.lic
+      SPLUNK_HEC_TOKEN: e957304e-364d-416f-8a1d-81e7059d2948
+    ports:
+      - 8000:8000
+      - 8088:8088
+      - 8089:8089
+    volumes:
+      - ./splunk.lic:/tmp/splunk.lic
+      - ./splmaster001-default.yaml:/tmp/defaults/default.yml
+
+  splunk_slave:
+    container_name: splslave001
+    image: splunk/splunk:8.2.6
+    command: start
+    environment:
+      SPLUNK_HOSTNAME: splslave001
+      SPLUNK_START_ARGS: --accept-license
+      SPLUNK_PASSWORD: secret123
+      SPLUNK_ROLE: splunk_standalone
+      SPLUNK_LICENSE_URI: /tmp/splunk.lic
+      SPLUNK_APPS_URL: https://splunkbase.splunk.com/app/2962/release/4.1.0/download
+    env_file:
+      - splunkbase.credentials
+    ports:
+      - 8100:8000
+      - 8189:8089
+    volumes:
+      - ./splunk.lic:/tmp/splunk.lic
+      - ./splslave001-default.yaml:/tmp/defaults/default.yml
+      - ./splslave001-post-tasks.yaml:/tmp/ansible-post-tasks.yaml
+      - ./TA-alert_forwarder:/opt/splunk/etc/apps/TA-alert_forwarder

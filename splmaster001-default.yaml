@@ -1,0 +1,12 @@
+---
+splunk:
+  conf:
+    - key: indexes
+      value:
+        directory: /opt/splunk/etc/system/local
+        content:
+          alerts:
+            homePath: $SPLUNK_DB/$_index_name/db
+            coldPath: $SPLUNK_DB/$_index_name/colddb
+            tstatsHomePath: volume:_splunk_summaries/$_index_name/datamodel_summary
+            thawedPath: $SPLUNK_DB/$_index_name/thaweddb
