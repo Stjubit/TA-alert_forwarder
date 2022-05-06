@@ -70,4 +70,4 @@ The app configuration and Saved Searches is already set, so you just have to spi
 
 ## Additional Infos
 
-This project is actually hosted in GitLab and synced bidirectionally with Github.
+This project is actually hosted in GitLab and synced to Github, but you can still contribute to this project in Github of course!
