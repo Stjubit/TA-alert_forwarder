@@ -8,7 +8,7 @@ The Setup of this TA is pretty simple. Here are the required steps:
 
 - Install the TA on your Splunk instance(s), which should forward Splunk Alerts
 - Restart Splunkd
-- Open the `Alert Forwarder for Splunk` App
+- Open the **Alert Forwarder for Splunk** App
 
   ![Navigation Bar Entry](/screenshots/nav_bar.jpg "Navigation Bar Entry")
 
