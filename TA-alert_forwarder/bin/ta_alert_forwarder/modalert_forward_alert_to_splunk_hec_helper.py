@@ -168,22 +168,38 @@ def process_event(helper, *args, **kwargs):
         )
     )
 
-    # fetch alert from Splunk to add alert description
+    # fetch alert from Splunk to add alert description and severity
     splunklib_client = splunklib.client.connect(
         token=helper.session_key, owner="-", app="-", sharing=None
     )
-    if (helper.search_name in splunklib_client.saved_searches) == False or (
-        "description" in splunklib_client.saved_searches[helper.search_name]
-    ) == False:
+    if (helper.search_name in splunklib_client.saved_searches) == False:
         helper.log_warn(
-            'Unable to fetch Saved Search Description "{}" - can\'t add Alert Description!'.format(
+            'Unable to fetch Saved Search "{}" - can\'t add Alert Description and Severity!'.format(
                 helper.search_name
             )
         )
     else:
-        alert["description"] = splunklib_client.saved_searches[helper.search_name][
-            "description"
-        ]
+        saved_search = splunklib_client.saved_searches[helper.search_name]
+
+        # add description
+        if ("description" in saved_search) == False:
+            helper.log_warn(
+                'Cannot find Description in Saved Search "{}": Unable to add it to the event!'.format(
+                    helper.search_name
+                )
+            )
+        else:
+            alert["description"] = saved_search["description"]
+
+        # add severity
+        if ("alert.severity" in saved_search) == False:
+            helper.log_warn(
+                'Cannot find Alert Severity (alert.severity) in Saved Search "{}": Unable to add it to the event!'.format(
+                    helper.search_name
+                )
+            )
+        else:
+            alert["severity"] = saved_search["alert.severity"]
 
     # send event to HEC
     success = send_request_to_hec(

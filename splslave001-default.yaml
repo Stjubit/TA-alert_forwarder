@@ -17,6 +17,7 @@ splunk:
             action.forward_alert_to_splunk_hec.param.splunk_hec_target: splmaster001
             alert.track: 0
             alert.digest_mode: 1
+            alert.severity: 1
             alert_condition: search foo="bar"
             counttype: custom
             cron_schedule: "* * * * *"
@@ -49,6 +50,7 @@ splunk:
             action.forward_alert_to_splunk_hec.param.splunk_hec_target: splmaster001
             alert.track: 0
             alert.digest_mode: 1
+            alert.severity: 5
             counttype: number of events
             relation: greater than
             alert_threshold: 0
