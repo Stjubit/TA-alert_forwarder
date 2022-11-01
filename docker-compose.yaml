@@ -31,7 +31,7 @@ services:
       SPLUNK_PASSWORD: secret123
       SPLUNK_ROLE: splunk_standalone
       SPLUNK_LICENSE_URI: /tmp/splunk.lic
-      SPLUNK_APPS_URL: https://splunkbase.splunk.com/app/2962/release/4.1.0/download
+      SPLUNK_APPS_URL: https://splunkbase.splunk.com/app/2962/release/4.1.1/download
     env_file:
       - splunkbase.credentials
     ports:
