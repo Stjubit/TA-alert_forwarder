@@ -7,6 +7,7 @@ import re
 import uuid
 
 from aob_py3.splunktaucclib.global_config import GlobalConfig, GlobalConfigSchema
+from requests.adapters import HTTPAdapter, Retry
 
 
 def send_request_to_hec(
@@ -41,9 +42,19 @@ def send_request_to_hec(
 
     helper.log_debug("HEC payload: {}".format(payload))
 
+    # initialize session and define retry strategy
+    http = requests.Session()
+    retries = Retry(
+        total=5,
+        backoff_factor=5,
+        method_whitelist=["HEAD", "OPTIONS", "POST"],
+        status_forcelist=[400, 401, 403, 429, 500, 503],
+    )
+    http.mount("https://", HTTPAdapter(max_retries=retries))
+
     try:
         # send request to HEC
-        response = requests.post(
+        response = http.post(
             url,
             headers={"Authorization": "Splunk {}".format(hec_token)},
             data=json.dumps(payload),
@@ -113,7 +124,7 @@ def process_event(helper, *args, **kwargs):
     hec_config = [x for x in all_hec_configs if x["name"] == splunk_hec_target]
 
     if len(hec_config) == 0:
-        helper.log_critical(
+        helper.log_error(
             "Unable to find HEC configuration for target {}".format(splunk_hec_target)
         )
 
@@ -216,7 +227,7 @@ def process_event(helper, *args, **kwargs):
     )
 
     if success == False:
-        helper.log_critical("Unable to forward alert to HEC!")
+        helper.log_error("Unable to forward alert to HEC!")
         return 1
 
     helper.log_info("Successfully forwarded alert to HEC!")
