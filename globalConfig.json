@@ -1,0 +1,338 @@
+{
+    "meta": {
+        "name": "TA-alert_forwarder",
+        "displayName": "Alert Forwarder for Splunk",
+        "version": "0.0.0+666147b",
+        "restRoot": "TA_alert_forwarder",
+        "schemaVersion": "0.0.9"
+    },
+    "pages": {
+        "configuration": {
+            "title": "Configuration",
+            "description": "Set up your add-on",
+            "tabs": [
+                {
+                    "name": "hec",
+                    "title": "Splunk HEC",
+                    "table": {
+                        "header": [
+                            {
+                                "field": "name",
+                                "label": "Name"
+                            },
+                            {
+                                "field": "hostname",
+                                "label": "Hostname"
+                            },
+                            {
+                                "field": "port",
+                                "label": "Port"
+                            }
+                        ],
+                        "actions": [
+                            "edit",
+                            "delete",
+                            "clone"
+                        ]
+                    },
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "HEC Name",
+                            "type": "text",
+                            "required": true,
+                            "help": "Enter a unique name for this HEC.",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 50,
+                                    "errorMsg": "Length of HEC name should be between 1 and 50"
+                                },
+                                {
+                                    "type": "regex",
+                                    "pattern": "^[a-zA-Z]\\w*$",
+                                    "errorMsg": "HEC name must start with a letter and followed by alphabetic letters, digits or underscores."
+                                }
+                            ]
+                        },
+                        {
+                            "field": "hostname",
+                            "label": "HEC Hostname",
+                            "type": "text",
+                            "required": true,
+                            "help": "Enter the HEC Hostname",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 200,
+                                    "errorMsg": "Length of HEC Hostname should be between 1 and 200"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "port",
+                            "label": "HEC Port",
+                            "type": "text",
+                            "required": true,
+                            "defaultValue": "8088",
+                            "help": "Enter the HEC Port",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        65535
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "field": "verify",
+                            "label": "Verify Server Certificate",
+                            "help": "Whether the Splunk HEC certificate should be verified",
+                            "required": false,
+                            "type": "checkbox",
+                            "defaultValue": true
+                        },
+                        {
+                            "field": "token",
+                            "label": "HEC Token",
+                            "type": "text",
+                            "encrypted": true,
+                            "required": true,
+                            "help": "Enter the HEC Token.",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Length of HEC Token should be between 1 and 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "retry_count",
+                            "label": "Number of Retries",
+                            "type": "text",
+                            "required": true,
+                            "defaultValue": "3",
+                            "help": "Enter the maximum number of retries if a HEC request fails",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        65535
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "field": "sleep_interval",
+                            "label": "Sleep Time",
+                            "type": "text",
+                            "required": true,
+                            "defaultValue": "60",
+                            "help": "Enter the number of seconds to sleep after a request fails before trying another time",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        65535
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "field": "timeout",
+                            "label": "Timeout",
+                            "type": "text",
+                            "required": true,
+                            "defaultValue": "30",
+                            "help": "Number of seconds to wait until a request to HEC times out",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        65535
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "proxy",
+                    "title": "Proxy",
+                    "entity": [
+                        {
+                            "field": "proxy_enabled",
+                            "label": "Enable",
+                            "type": "checkbox"
+                        },
+                        {
+                            "field": "proxy_type",
+                            "label": "Proxy Type",
+                            "type": "singleSelect",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "label": "http",
+                                        "value": "http"
+                                    },
+                                    {
+                                        "label": "socks4",
+                                        "value": "socks4"
+                                    },
+                                    {
+                                        "label": "socks5",
+                                        "value": "socks5"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "http"
+                        },
+                        {
+                            "field": "proxy_url",
+                            "label": "Host",
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 4096,
+                                    "errorMsg": "Max host length is 4096"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_port",
+                            "label": "Port",
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        65535
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_username",
+                            "label": "Username",
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 50,
+                                    "errorMsg": "Max length of username is 50"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_password",
+                            "label": "Password",
+                            "type": "text",
+                            "encrypted": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "minLength": 0,
+                                    "maxLength": 8192,
+                                    "errorMsg": "Max length of password is 8192"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_rdns",
+                            "label": "Remote DNS resolution",
+                            "type": "checkbox"
+                        }
+                    ],
+                    "options": {
+                        "saveValidator": "function(formData) { if(!formData.proxy_enabled || formData.proxy_enabled === '0') {return true; } if(!formData.proxy_url) { return 'Proxy Host can not be empty'; } if(!formData.proxy_port) { return 'Proxy Port can not be empty'; } return true; }"
+                    }
+                },
+                {
+                    "type": "loggingTab"
+                }
+            ]
+        }
+    },
+    "alerts": [
+        {
+            "name": "forward_alert_to_splunk_hec",
+            "label": "Forward Alert to Splunk HEC",
+            "description": "Forward the Alert to a Splunk HTTP Event Collector",
+            "iconFileName": "alert_forward_alert_to_splunk_hec.png",
+            "customScript": "alert_action_forward_alert",
+            "entity": [
+                {
+                    "type": "singleSelectSplunkSearch",
+                    "label": "Splunk HEC Target",
+                    "field": "splunk_hec_target",
+                    "search": "| rest splunk_server=local /servicesNS/-/TA-alert_forwarder/TA_alert_forwarder_hec | table title",
+                    "options": {
+                        "items": [
+                            {
+                                "label": "earliest",
+                                "value": "-24h"
+                            },
+                            {
+                                "label": "latest",
+                                "value": "now"
+                            }
+                        ]
+                    },
+                    "valueField": "title",
+                    "labelField": "title",
+                    "help": "Splunk HTTP Event Collector Target",
+                    "required": true
+                },
+                {
+                    "type": "text",
+                    "label": "Index",
+                    "field": "index",
+                    "required": false,
+                    "help": "Index to which the events should be sent to (optional)"
+                },
+                {
+                    "type": "text",
+                    "label": "Host",
+                    "field": "host",
+                    "required": false,
+                    "help": "Host field for the event (optional)"
+                },
+                {
+                    "type": "text",
+                    "label": "Source",
+                    "field": "source",
+                    "required": false,
+                    "help": "Source field for the event (optional)"
+                },
+                {
+                    "type": "text",
+                    "label": "Sourcetype",
+                    "field": "sourcetype",
+                    "required": false,
+                    "help": "Sourcetype field for the event (optional)"
+                },
+                {
+                    "type": "text",
+                    "label": "Field Exclusions",
+                    "field": "regex_field_exclusions",
+                    "required": false,
+                    "help": "Comma-separated list of Regex patterns to exclude fields from Alert search results (optional)"
+                }
+            ]
+        }
+    ]
+}

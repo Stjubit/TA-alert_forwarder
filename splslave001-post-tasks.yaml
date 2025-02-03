@@ -1,8 +1,6 @@
-- name: "post_task : Update HEC Token JSON"
-  ansible.builtin.replace:
-    path: /opt/splunk/etc/system/local/passwords.conf
-    regexp: '<to_be_replaced>'
-    replace: '{"token": "e957304e-364d-416f-8a1d-81e7059d2948"}'
-
-- name: Restart Splunkd
-  ansible.builtin.command: /opt/splunk/bin/splunk restart
+---
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: /tmp/appmount/output/TA-alert_forwarder
+    dest: /opt/splunk/etc/apps/TA-alert_forwarder
+    state: link

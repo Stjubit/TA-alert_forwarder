@@ -1,8 +1,4 @@
 ---
 include:
   - project: blueprints/gitlab-ci
-    file: /splunk-apps/package-release.yaml
-    ref: master
-
-variables:
-  APP_BASE_DIRECTORY: "TA-alert_forwarder"
+    file: splunk-apps/splunk-ucc-full.yaml

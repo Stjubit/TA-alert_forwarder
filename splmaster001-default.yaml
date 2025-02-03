@@ -1,6 +1,18 @@
 ---
 splunk:
   conf:
+    - key: web
+      value:
+        directory: /opt/splunk/etc/system/local
+        content:
+          settings:
+            max_upload_size: 1024
+            enableSplunkWebSSL: 1
+            js_no_cache: true
+            cacheBytesLimit: 0
+            cacheEntriesLimit: 0
+            max_view_cache_size: 0
+            auto_refresh_views: 1
     - key: indexes
       value:
         directory: /opt/splunk/etc/system/local
